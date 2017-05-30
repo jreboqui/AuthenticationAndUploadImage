@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "833216636461",
+    "firebase_url": "https://authenticationanduploadimage.firebaseio.com",
+    "project_id": "authenticationanduploadimage",
+    "storage_bucket": "authenticationanduploadimage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833216636461:android:c598853ba46e3d9c",
+        "android_client_info": {
+          "package_name": "com.example.junnel_lalaine.authenticationanduploadimage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833216636461-7iuut9r5t5cbnq58mficj4gn25h018au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.junnel_lalaine.authenticationanduploadimage",
+            "certificate_hash": "d9107f937036be8983889ad41ce89c4f1e1a9300"
+          }
+        },
+        {
+          "client_id": "833216636461-ff9rkm0nmatdijggjfd9apob5q5gftad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-rgGd_i6L1IkTDM37BucNqQSsRCdjZxY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833216636461-ff9rkm0nmatdijggjfd9apob5q5gftad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
