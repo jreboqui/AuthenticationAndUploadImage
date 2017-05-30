@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -39,9 +41,10 @@ public class UploadActivity extends AppCompatActivity {
     private ImageView imageView;
     private EditText txtImageName;
     private Uri imgUri;
+    private FirebaseAuth auth;
 
-    public static final String FB_STORAGE_PATH = "image/";
-    public static final String FB_DATABASE_PATH = "image/";
+    public static final String FB_STORAGE_PATH = "image/users";
+    public static final String FB_DATABASE_PATH = "image/users";
     public static final int REQUEST_CODE = 1234;
 
 
@@ -49,6 +52,8 @@ public class UploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_layout);
+
+        auth = FirebaseAuth.getInstance();
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(FB_DATABASE_PATH);
@@ -99,7 +104,14 @@ public class UploadActivity extends AppCompatActivity {
             dialog.setTitle("Uploading image");
             dialog.show();
 
-            StorageReference ref = mStorageRef.child(FB_STORAGE_PATH + System.currentTimeMillis() + "." + getImageExt(imgUri));
+            //get the signed in user
+            FirebaseUser user = auth.getCurrentUser();
+            final String userId = user.getUid();
+           // final String userName = user.getDisplayName();
+
+            String imageName = txtImageName.getText().toString();
+
+            StorageReference ref = mStorageRef.child(FB_STORAGE_PATH + "/" + userId + "/" + imageName + "." + getImageExt(imgUri));
 
             //Add file
             ref.putFile(imgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -108,7 +120,7 @@ public class UploadActivity extends AppCompatActivity {
                     //Dismiss dialog when done
                     dialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_SHORT).show();
-                    ImageUpload imageUpload = new ImageUpload(txtImageName.getText().toString(), taskSnapshot.getDownloadUrl().toString());
+                    ImageUpload imageUpload = new ImageUpload(txtImageName.getText().toString(), taskSnapshot.getDownloadUrl().toString(), userId);
 
                     // /Save image info into firebase database
                     String uploadId = mDatabaseRef.push().getKey();
@@ -121,8 +133,6 @@ public class UploadActivity extends AppCompatActivity {
                             //Dismiss dialog and show an error
                             dialog.dismiss();
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-
-
 
                         }
                     })
