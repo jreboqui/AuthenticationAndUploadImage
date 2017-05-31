@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         btnSignOut = (Button) findViewById(R.id.email_sign_out_button);
         btnUploadImage = (Button) findViewById(R.id.upload_image);
 
+        String userName;
+        //sharedpreference here and save user name
+
 
         mAuth = FirebaseAuth.getInstance();
 

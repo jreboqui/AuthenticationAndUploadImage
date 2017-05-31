@@ -44,7 +44,7 @@ public class UploadActivity extends AppCompatActivity {
     private FirebaseAuth auth;
 
     public static final String FB_STORAGE_PATH = "image/users";
-    public static final String FB_DATABASE_PATH = "image/users";
+    String FB_DATABASE_PATH = "users/";
     public static final int REQUEST_CODE = 1234;
 
 
@@ -55,8 +55,13 @@ public class UploadActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
+        //get the signed in user
+        FirebaseUser user = auth.getCurrentUser();
+        String account = user.getEmail();
+        String userName = account.substring(0,account.lastIndexOf("@"));
+
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference(FB_DATABASE_PATH);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference(FB_DATABASE_PATH + "/" + userName + "/");
 
         imageView = (ImageView) findViewById(R.id.imageView);
         txtImageName = (EditText) findViewById(R.id.txtImageName);
@@ -104,10 +109,10 @@ public class UploadActivity extends AppCompatActivity {
             dialog.setTitle("Uploading image");
             dialog.show();
 
-            //get the signed in user
             FirebaseUser user = auth.getCurrentUser();
             final String userId = user.getUid();
-           // final String userName = user.getDisplayName();
+            final String account = user.getEmail();
+            final String userName = account.substring(0,account.lastIndexOf("@"));
 
             String imageName = txtImageName.getText().toString();
 
@@ -120,10 +125,11 @@ public class UploadActivity extends AppCompatActivity {
                     //Dismiss dialog when done
                     dialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_SHORT).show();
-                    ImageUpload imageUpload = new ImageUpload(txtImageName.getText().toString(), taskSnapshot.getDownloadUrl().toString(), userId);
+                    String uploadId = mDatabaseRef.push().getKey();
+                    ImageUpload imageUpload = new ImageUpload(txtImageName.getText().toString(), taskSnapshot.getDownloadUrl().toString(),userId);
 
                     // /Save image info into firebase database
-                    String uploadId = mDatabaseRef.push().getKey();
+
                     mDatabaseRef.child(uploadId).setValue(imageUpload);
                 }
             })
@@ -143,7 +149,7 @@ public class UploadActivity extends AppCompatActivity {
 
                             //Show upload progress
 
-                            double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            double progress = (10 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                             dialog.setMessage("Uploaded " + (int)progress+"0");
                         }
                     });

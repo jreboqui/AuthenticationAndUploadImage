@@ -8,11 +8,15 @@ public class ImageUpload {
 
     public String name;
     public String url;
+    //public String uploadId;
     public String userId;
 
     public String getUserId(){
-        return userId;
+       return userId;
     }
+
+  //  public String getUploadId(){ return uploadId;}
+
     public String getName(){
         return name;
     }
@@ -25,5 +29,6 @@ public class ImageUpload {
         this.name = name;
         this.url = url;
         this.userId = userId;
+      //  this.uploadId = uploadId;
     }
 }
